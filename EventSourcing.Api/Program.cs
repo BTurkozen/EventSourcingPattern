@@ -1,3 +1,4 @@
+using EventSourcing.Api.BackgroundServices;
 using EventSourcing.Api.EventStores;
 using EventSourcing.Api.Extentions;
 using EventSourcing.Api.Models;
@@ -24,6 +25,8 @@ builder.Services.AddDbContext<DataContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectionStr"));
 });
+
+builder.Services.AddHostedService<ProductReadModelEventStore>();
 
 var app = builder.Build();
 
