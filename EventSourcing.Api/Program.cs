@@ -1,3 +1,4 @@
+using EventSourcing.Api.EventStores;
 using EventSourcing.Api.Extentions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +11,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddEventStore(builder.Configuration);
+
+builder.Services.AddSingleton<ProductStream>();
 
 var app = builder.Build();
 
