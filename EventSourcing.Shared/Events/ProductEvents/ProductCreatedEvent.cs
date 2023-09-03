@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace EventSourcing.Shared.Events.ProductEvents
+﻿namespace EventSourcing.Shared.Events.ProductEvents
 {
     public class ProductCreatedEvent : IEvent
     {
