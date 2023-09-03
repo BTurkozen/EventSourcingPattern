@@ -36,16 +36,17 @@ namespace EventSourcing.Api.BackgroundServices
             // autoAck: false => Bunu biz method içerisinde elle yapıyoruz. arg1.Acknowledge(arg2.Event.EventId); bu işlemi false yazma işleminde gerçekleştiririz.
             await _eventStoreConnection.ConnectToPersistentSubscriptionAsync(ProductStream.StreamName, ProductStream.GroupName, EventAppeared, autoAck: false);
 
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         private async Task EventAppeared(EventStorePersistentSubscriptionBase arg1, ResolvedEvent arg2)
         {
-            _logger.LogInformation("The Message processing...");
 
             // Gelen event'ın tipini alıyoruz.
             // MetaData tipleri ayrı class library'de olduğu için böyle bir kod ekliyoruz.
             var type = Type.GetType($"{Encoding.UTF8.GetString(arg2.Event.Metadata)}, EventSourcing.Shared");
+
+            _logger.LogInformation($"The Message processing...: {type}");
 
             var eventData = Encoding.UTF8.GetString(arg2.Event.Data);
 
@@ -70,6 +71,8 @@ namespace EventSourcing.Api.BackgroundServices
                         UserId = productCreatedEvent.UserId,
                     };
 
+                    await dataContext.Products.AddAsync(product);
+
                     break;
 
                 case ProductNameChangedEvent productNameChangedEvent:
@@ -79,6 +82,8 @@ namespace EventSourcing.Api.BackgroundServices
                     if (product is not null)
                     {
                         product.Name = productNameChangedEvent.ChangedName;
+
+                        dataContext.Products.Update(product);
                     }
 
                     break;
@@ -90,6 +95,8 @@ namespace EventSourcing.Api.BackgroundServices
                     if (product is not null)
                     {
                         product.Price = productPriceChangedEvent.ChangedPrice;
+
+                        dataContext.Products.Update(product);
                     }
 
                     break;

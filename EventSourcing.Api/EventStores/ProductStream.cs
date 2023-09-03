@@ -26,12 +26,12 @@ namespace EventSourcing.Api.EventStores
 
         public void NameChanged(ChangeProductNameDto changeProductNameDto)
         {
-            Events.AddLast(new ProductNameChangedEvent { Id = Guid.NewGuid(), ChangedName = changeProductNameDto.Name });
+            Events.AddLast(new ProductNameChangedEvent { Id = changeProductNameDto.Id, ChangedName = changeProductNameDto.Name });
         }
 
         public void PriceChanged(ChangeProductPriceDto changeProductPriceDto)
         {
-            Events.AddLast(new ProductPriceChangedEvent { Id = Guid.NewGuid(), ChangedPrice = changeProductPriceDto.Price });
+            Events.AddLast(new ProductPriceChangedEvent { Id = changeProductPriceDto.Id, ChangedPrice = changeProductPriceDto.Price });
         }
 
         public void Deleted(Guid id)
